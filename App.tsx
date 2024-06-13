@@ -27,7 +27,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   useEffect(() => {
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }, []);
   return (
     <NavigationContainer>

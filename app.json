@@ -2,7 +2,7 @@
   "expo": {
     "name": "カチッ",
     "slug": "kachi-xtu",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -25,22 +25,29 @@
         ]
       },
       "bundleIdentifier": "com.oosakanoakuma.kachi-xtu",
-      "buildNumber": "101",
+      "buildNumber": "102",
       "icon": "./assets/icon.png",
-      "supportsTablet": true 
+      "supportsTablet": false
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.oosakanoakuma.kachi-xtu",
+      "package": "com.oosakanoakuma.kachi_xtu",
       "icon": "./assets/icon.png"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "PORTRAIT_UP"
+        }
+      ],
+      "expo-font",
       "expo-secure-store",
       [
         "expo-build-properties",
@@ -49,14 +56,7 @@
             "usesCleartextTraffic": true
           }
         }
-      ],
-      [
-        "expo-screen-orientation",
-        {
-          "initialOrientation": "PORTRAIT"
-        }
-      ],
-      "expo-font"
+      ]
     ],
     "extra": {
       "eas": {

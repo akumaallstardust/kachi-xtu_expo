@@ -23,7 +23,7 @@ import * as Updates from "expo-updates";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import * as ScreenOrientation from "expo-screen-orientation";
-import { useFocusEffect,CommonActions } from "@react-navigation/native";
+import { useFocusEffect, CommonActions } from "@react-navigation/native";
 import Svg, { SvgProps, Path, Circle } from "react-native-svg";
 import {
   useFonts,
@@ -48,7 +48,6 @@ const super_reload = async () => {
 
 //const site_url = "http://192.168.1.16:8000/";
 const site_url = "https://kachi-xtu.com/";
-
 
 function is_android() {
   return Platform.OS == "android";
@@ -380,10 +379,10 @@ function jump_with_prams(
 ) {
   navigation.setParams({});
   const navigateAction = CommonActions.navigate({
-    name:screen_name,
+    name: screen_name,
     params: params_dict,
   });
-  navigation.navigate(screen_name,params_dict);
+  navigation.navigate(screen_name, params_dict);
 }
 
 const Gray_out_page_base = styled(SafeAreaView)`
@@ -815,11 +814,11 @@ const H3 = styled(General_text)`
   color: #5a9fa6;
 `;
 
-const Body_box=styled.View`
-background-color: #f1f3f5;
+const Body_box = styled.View`
+  background-color: #f1f3f5;
   width: 100%;
   height: 100%;
-`
+`;
 const Body = styled.ScrollView`
   background-color: #f1f3f5;
   width: ${v_w(100.0)}px;
@@ -1115,7 +1114,7 @@ const To_login_page = styled(General_text)`
 const My_icon_box = styled(TouchableOpacity)`
   position: absolute;
   top: ${v_w(0.0)}px;
- left:0%;
+  left: 0%;
   width: ${v_w(20.0)}px;
   height: ${v_w(20.0)}px;
   vertical-align: middle;
@@ -1136,7 +1135,7 @@ type main_base_props = {
   navigation: any;
   children: any;
   no_scroll?: boolean;
-  background_transparent?:boolean
+  background_transparent?: boolean;
 };
 const Main_base = ({
   navigation,
@@ -1186,7 +1185,7 @@ const Main_base = ({
             onPress={() => {
               const resetAction = CommonActions.reset({
                 index: 0, // 初期スタックのインデックス
-                routes: [{ name: 'Search_page', params: {search_words:""} }],
+                routes: [{ name: "Search_page", params: { search_words: "" } }],
               });
               navigation.dispatch(resetAction);
             }}
@@ -1244,11 +1243,12 @@ const Main_base = ({
             <To_notification_page_text>通知</To_notification_page_text>
           </To_notification_page_box>
           <To_search_page_box
-            onPress={() => {const resetAction = CommonActions.reset({
-              index: 0, // 初期スタックのインデックス
-              routes: [{ name: 'Search_page', params: {search_words:""} }],
-            });
-            navigation.dispatch(resetAction);
+            onPress={() => {
+              const resetAction = CommonActions.reset({
+                index: 0, // 初期スタックのインデックス
+                routes: [{ name: "Search_page", params: { search_words: "" } }],
+              });
+              navigation.dispatch(resetAction);
             }}
           >
             <To_search_icon_svg />
@@ -1324,21 +1324,23 @@ const Main_base = ({
     return (
       <SafeAreaView>
         <StatusBar style="dark" />
-        <Body_box>
         <Body>
           {children}
           <Footer_space></Footer_space>
         </Body>
-        </Body_box>
         <Site_footer>{variable_part}</Site_footer>
       </SafeAreaView>
     );
   }
 };
 
-const Main_base_no_footer = ({ navigation, children,background_transparent=false }: main_base_props) => {
+const Main_base_no_footer = ({
+  navigation,
+  children,
+  background_transparent = false,
+}: main_base_props) => {
   const B_100 = styled.View`
-    background-color: ${background_transparent ? "transparent":"#f1f3f5"};
+    background-color: ${background_transparent ? "transparent" : "#f1f3f5"};
     width: 100%;
     height: 100%;
   `;
