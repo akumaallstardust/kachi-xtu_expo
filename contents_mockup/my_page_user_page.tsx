@@ -20,6 +20,8 @@ import {
   flexble_px,
   jump_with_prams,
   re_first_boot,
+  width,
+  height,
 } from "./parts";
 import {
   Dimensions,
@@ -29,7 +31,7 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
-  useWindowDimensions,
+  //useWindowDimensions,
   Linking,
 } from "react-native";
 import { Password_input } from "./login_signup";
@@ -286,7 +288,7 @@ function My_page({ navigation }: navi_props) {
         .catch((error) => {
           showalert(
             "通信エラー",
-            `エラーコード:金がない　金がないから　金がない\n\n通信状況が問題ないことを確認した後も同じエラーが出るときは運営にエラーコードと共に伝えてください。\n詳細エラーコード${error}`
+            "エラーコード:金がない　金がないから　金がない\n\n通信状況が問題ないことを確認した後も同じエラーが出るときは運営にエラーコードと共に伝えてください。"
           );
         });
     } else {
@@ -322,7 +324,7 @@ type user_page_props = {
 
 const Hoge = () => {
   console.log("hoge");
-  const { width, height } = useWindowDimensions();
+  //const { width, height } = useWindowDimensions();
   const Hoge_hoge = () => {
     console.log("hoge_hoge");
     return (
@@ -339,7 +341,7 @@ let user_post_dict_list: { id: number; title: string }[] = [];
 
 function User_page({ route, navigation }: user_page_props) {
   user_id = get_user_id();
-  const { width, height } = useWindowDimensions();
+  //const { width, height } = useWindowDimensions();
   if (width >= 500) {
     var User_page_name_u = styled(User_page_name)`
       left: ${width * 0.33 < 200 ? width * 0.35 : 210}px;
@@ -680,7 +682,7 @@ function User_page({ route, navigation }: user_page_props) {
           set_option("user");
         }}
       >
-        <User_page_option_left_text>フォローリスト</User_page_option_left_text>
+        <User_page_option_left_text>フォロー</User_page_option_left_text>
       </User_page_option_left>,
     ]);
     const [user_page_options_right, setuser_page_options_right] = useState(
@@ -750,7 +752,7 @@ function User_page({ route, navigation }: user_page_props) {
             }}
           >
             <User_page_option_left_text_selected>
-            フォローリスト
+              フォローリスト
             </User_page_option_left_text_selected>
           </User_page_option_left_selected>
         ]);
@@ -809,7 +811,7 @@ function User_page({ route, navigation }: user_page_props) {
             set_option("user");
           }}
         >
-          <User_page_option_left_text>フォローリスト</User_page_option_left_text>
+          <User_page_option_left_text>フォロー</User_page_option_left_text>
         </User_page_option_left>,
       ]);
       let request_json_data = {
@@ -969,7 +971,7 @@ function User_page({ route, navigation }: user_page_props) {
           .catch((error) => {
             showalert(
               "通信エラー",
-              `エラーコード:晴れて地崩れる\n\n通信状態を確認してください\n\n通信状態を確認した後もこのメッセージが表示される場合はエラーコードと共に運営に伝えてください。\n詳細エラーコード${error}`
+              "エラーコード:晴れて地崩れる\n\n通信状態を確認してください\n\n通信状態を確認した後もこのメッセージが表示される場合はエラーコードと共に運営に伝えてください。"
             );
             console.log(error);
           });
@@ -1122,9 +1124,9 @@ const Delete_account_button_text = styled(General_text)`
   font-family: "NotoSans_700Bold";
   text-align: center;
   ${flexble_font_size(28)}
-  height: ${flexble_px(60)}
+  height: 60px;
   margin-top: -5px;
-  line-height: ${flexble_px(60)}
+  line-height: 60px;
   color: #41717c;
 `;
 function Delete_account_screen({
@@ -1173,7 +1175,7 @@ function Delete_account_screen({
         .catch((error) => {
           showalert(
             "通信エラー",
-           `エラーコード:マウスホイールの調子が悪い\n\n通信状況が問題ないことを確認した後も同じエラーが出るときは運営にエラーコードと共に伝えてください。\n詳細エラーコード${error}`
+            "エラーコード:マウスホイールの調子が悪い\n\n通信状況が問題ないことを確認した後も同じエラーが出るときは運営にエラーコードと共に伝えてください。"
           );
         });
     }

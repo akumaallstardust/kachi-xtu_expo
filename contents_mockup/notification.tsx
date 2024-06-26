@@ -217,65 +217,60 @@ function Notification_page({ navigation }: navi_props) {
     useCallback(() => {
       const user_id = get_user_id();
       if (user_id <= 0) {
-      } else {
-        let request_json_data;
-        let session_datas = get_session_datas();
-        request_json_data = {};
-        request_json_data = Object.assign(session_datas, request_json_data);
-        fetch(site_url + "get_notification_data_app/", {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json", //JSON形式のデータのヘッダー
-          },
-          body: JSON.stringify(request_json_data),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data["result"] == "success") {
-              let notification_data_list = JSON.parse(
-                data["notifications_json"]
+      }
+      let request_json_data;
+      let session_datas = get_session_datas();
+      request_json_data = {};
+      request_json_data = Object.assign(session_datas, request_json_data);
+      fetch(site_url + "get_notification_data_app/", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json", //JSON形式のデータのヘッダー
+        },
+        body: JSON.stringify(request_json_data),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data["result"] == "success") {
+            let notification_data_list = JSON.parse(data["notifications_json"]);
+            notification_data_list.reverse();
+            setnotifications(<View></View>);
+            if (notification_data_list.length >= 1) {
+              setnotifications(
+                <View>
+                  {notification_data_list.map((notification: any) => (
+                    <Notification_comp
+                      key={notification["notification_id"]}
+                      notification_data={notification}
+                      navigation={navigation}
+                      setout_of_main={setout_of_main}
+                    />
+                  ))}
+                </View>
               );
-              notification_data_list.reverse();
-              setnotifications(<View></View>);
-              if (notification_data_list.length >= 1) {
-                setnotifications(
-                  <View>
-                    {notification_data_list.map((notification: any) => (
-                      <Notification_comp
-                        key={notification["notification_id"]}
-                        notification_data={notification}
-                        navigation={navigation}
-                        setout_of_main={setout_of_main}
-                      />
-                    ))}
-                  </View>
-                );
-              } else {
-                setnotifications(
-                  <No_notification_box>
-                    <No_notification_text>
-                      通知がありません
-                    </No_notification_text>
-                  </No_notification_box>
-                );
-              }
-            } else if (data["result"] == "incorrect_session") {
-              display_session_error(navigation);
             } else {
-              showalert(
-                "エラー",
-                "エラーコード:家の近くにココス(朝食バイキングあり)が欲しい\n\n読み込み直しても同じエラーが出る場合エラーコードと共に運営に問い合わせてください"
+              setnotifications(
+                <No_notification_box>
+                  <No_notification_text>通知がありません</No_notification_text>
+                </No_notification_box>
               );
             }
-          })
-          .catch((error: Error) => {
-            console.log(error);
+          } else if (data["result"] == "incorrect_session") {
+            display_session_error(navigation);
+          } else {
             showalert(
-              "通信エラー",
-              "エラーコード:いつも乗り換えで使うけど構内から出たことがない駅\n\n読み込み直しても同じエラーが出る場合エラーコードと共に運営に問い合わせてください"
+              "エラー",
+              "エラーコード:家の近くにココス(朝食バイキングあり)が欲しい\n\n読み込み直しても同じエラーが出る場合エラーコードと共に運営に問い合わせてください"
             );
-          });
-      }
+          }
+        })
+        .catch((error: Error) => {
+          console.log(error);
+          showalert(
+            "通信エラー",
+            "エラーコード:いつも乗り換えで使うけど構内から出たことがない駅\n\n読み込み直しても同じエラーが出る場合エラーコードと共に運営に問い合わせてください"
+          );
+        });
       return () => {
         // 画面がアンフォーカスされたときに実行する処理（オプション）
         //setsearch_result(<View></View>)

@@ -11,17 +11,17 @@ import {
   ImagePropsBase,
   Image,
   Platform,
-  useWindowDimensions,
+  //useWindowDimensions,
 } from "react-native";
 import * as ImageManipulator from "expo-image-manipulator";
-import { StatusBar } from "expo-status-bar";
+//import { StatusBar } from "expo-status-bar";
 import {
-  useSafeAreaInsets,
+  //useSafeAreaInsets,
   SafeAreaView,
 } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import * as SecureStore from "expo-secure-store";
-import 'react-native-get-random-values';
+import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import * as Updates from "expo-updates";
 import * as ImagePicker from "expo-image-picker";
@@ -35,8 +35,9 @@ import {
   NotoSans_700Bold,
 } from "@expo-google-fonts/noto-sans";
 import * as Device from "expo-device";
-import { Asset } from 'expo-asset';
-import { RR利用規約,PPプライバシーポリシー } from "../license";
+import { Asset } from "expo-asset";
+import { RR利用規約, PPプライバシーポリシー } from "../license";
+import { captureRef } from "react-native-view-shot";
 
 async function lockScreenOrientation() {
   await ScreenOrientation.lockAsync(
@@ -44,11 +45,26 @@ async function lockScreenOrientation() {
   );
 }
 
-const re_first_boot=()=>{//テスト用
-  SecureStore.deleteItemAsync("not_first_boot_flag")
-  log_out()
-  super_reload()
-}
+const insets: { top: number; bottom: number } = { top: 48, bottom: 34 };
+const width = 414; //Dimensions.get("window").width
+const height = 896; //Dimensions.get("window").height
+type sssttt = {
+  style: string;
+};
+const StatusBar = ({ style }: sssttt) => {
+  return (
+    <View
+      style={{ top: 0, width: "100%", height: 44, backgroundColor: "#f2f3f5" }}
+    />
+  );
+};
+
+const re_first_boot = () => {
+  //テスト用
+  SecureStore.deleteItemAsync("not_first_boot_flag");
+  log_out();
+  super_reload();
+};
 
 // アプリを再読み込みする関数
 const super_reload = async () => {
@@ -149,9 +165,11 @@ const formdata_fetch = async (url: string, formdata: any, json: object) => {
   });
 };
 
-const is_iPad = false//is_android?false:Device.modelName?Device.modelName!.startsWith("iPad"):false;
-
+const is_iPad = false; //is_android?false:Device.modelName?Device.modelName!.startsWith("iPad"):false;
 const v_w = (percentage: number, mini_in_iPad = false) => {
+  return (percentage / 100) * width;
+};
+/*const v_w = (percentage: number, mini_in_iPad = false) => {
   if (Dimensions.get("window").width <= Dimensions.get("window").height) {
     return (
       Dimensions.get("window").width *
@@ -165,9 +183,7 @@ const v_w = (percentage: number, mini_in_iPad = false) => {
       (mini_in_iPad && is_iPad ? 0.75 : 1)
     );
   }
-};
-
-const flexble_px = (px: number) => {
+}*/ const flexble_px = (px: number) => {
   return `${v_w(100) >= 500 ? px : px * 0.8}px;`; //一時的
 
   //return `${is_iPad ? px:px*0.8}px;`
@@ -228,7 +244,9 @@ const v_h = (percentage: number) => {
   }
 };
 
-const bold_status = is_android? `font-weight: bold;`: `font-family: "NotoSans_700Bold";`;
+const bold_status = is_android
+  ? `font-weight: bold;`
+  : `font-family: "NotoSans_700Bold";`;
 
 const General_text = styled.Text`
   color: #555555;
@@ -308,7 +326,7 @@ type rotation_view_props = {
   children: any;
 };
 const Rotation_view = ({ children }: rotation_view_props) => {
-  const { width, height } = useWindowDimensions();
+  //const { width, height } = useWindowDimensions();
   const [xsd, setxsd] = useState(children);
   const rrr = () => {
     setxsd(<View />);
@@ -356,31 +374,30 @@ const showalert = (
     Alert.alert(
       title, // アラートのタイトル
       content, // アラートのメッセージ
-      first_option==second_option?
-      [
-        {
-          text: second_option,
-          onPress: () => {
-            resolve(second_option);
-          },
-        },
-      ]
-      :[
-        {
-          text: first_option,
-          onPress: () => {
-            resolve(first_option);
-          },
-          style: "cancel",
-        },
-        {
-          text: second_option,
-          onPress: () => {
-            resolve(second_option);
-          },
-        },
-      ]
-      ,
+      first_option == second_option
+        ? [
+            {
+              text: second_option,
+              onPress: () => {
+                resolve(second_option);
+              },
+            },
+          ]
+        : [
+            {
+              text: first_option,
+              onPress: () => {
+                resolve(first_option);
+              },
+              style: "cancel",
+            },
+            {
+              text: second_option,
+              onPress: () => {
+                resolve(second_option);
+              },
+            },
+          ],
       { cancelable: true } // オプションでキャンセル可能かどうかを指定
     );
   });
@@ -515,7 +532,7 @@ async function display_session_error(navigation: any) {
   });
 }
 
-async function log_out(navigation: any=null, comfirmation = false) {
+async function log_out(navigation: any = null, comfirmation = false) {
   if (comfirmation) {
     showalert("確認", "ログアウトしますか", "いいえ", "はい").then(
       (response: any) => {
@@ -537,7 +554,7 @@ async function log_out(navigation: any=null, comfirmation = false) {
     SecureStore.setItemAsync("session_id_1", "");
     SecureStore.setItemAsync("session_id_2", "");
     //SecureStore.deleteItemAsync("not_first_boot_flag"); //テスト用
-    if(navigation){
+    if (navigation) {
       navigation.navigate("Search_page");
     }
   }
@@ -547,13 +564,13 @@ const clearSpecificImageCache = async (imageUrl: string) => {
   try {
     // キャッシュディレクトリのパス
     const cacheDir = FileSystem.cacheDirectory;
-    const cacheFilePath = `${cacheDir}${imageUrl.split('/').pop()}`;
+    const cacheFilePath = `${cacheDir}${imageUrl.split("/").pop()}`;
 
     // キャッシュファイルの削除
     await FileSystem.deleteAsync(cacheFilePath, { idempotent: true });
   } catch (error) {
-    console.log(error)
-    throw error
+    console.log(error);
+    throw error;
   }
 };
 
@@ -597,9 +614,11 @@ const Gray_out_page = ({
     height: 100%;
     position: absolute;
   `;
+  const gggref=useRef(null)
+  ASDREF=gggref
   return (
-    <Gray_out_page_base>
-      <Gray_out_page_touch
+    <Gray_out_page_base ref={gggref} style={{ height: height, width: width }}>
+      <Gray_out_page_touch style={{ height: height, width: width }}
         activeOpacity={1}
         onPress={onPress}
       ></Gray_out_page_touch>
@@ -830,8 +849,8 @@ async function alert_buttom({
   return new Promise((resolve, reject) => {
     let deleted_flag = false;
     function An_alert() {
-      const insets = useSafeAreaInsets();
-      const { width, height } = useWindowDimensions();
+      //const insets = useSafeAreaInsets();
+      //const { width, height } = useWindowDimensions();
       const Bottom_alert_box = styled.View`
         position: absolute;
         width: 100%;
@@ -849,7 +868,7 @@ async function alert_buttom({
         ${flexble_font_size(28)}
         line-height: 60px;
         padding-left: 10%;
-        width:100%;
+        width: 100%;
         height: 60px;
         color: white;
         ${is_top
@@ -890,11 +909,11 @@ type riyoukiyaku_comp_props = {
   deny_event?: Function;
   out_event?: Function;
   selectable?: boolean;
-  is_priv?:boolean;
-  top_text?:string;
-  main_text?:string;
-  left_small_option_text?:string;
-  right_big_option_text?:string;
+  is_priv?: boolean;
+  top_text?: string;
+  main_text?: string;
+  left_small_option_text?: string;
+  right_big_option_text?: string;
 };
 
 function Riyoukiyaku_comp({
@@ -902,82 +921,82 @@ function Riyoukiyaku_comp({
   deny_event = () => {},
   out_event = () => {},
   selectable = false,
-  is_priv=false,
-  top_text=is_priv?"プライバシーポリシー":"利用規約",
-  main_text=is_priv?PPプライバシーポリシー:RR利用規約,
-  left_small_option_text="拒否",
-  right_big_option_text="同意"
+  is_priv = false,
+  top_text = is_priv ? "プライバシーポリシー" : "利用規約",
+  main_text = is_priv ? PPプライバシーポリシー : RR利用規約,
+  left_small_option_text = "拒否",
+  right_big_option_text = "同意",
 }: riyoukiyaku_comp_props) {
-  const { width, height } = useWindowDimensions();
+  //const { width, height } = useWindowDimensions();
   function AGOPPPPPP() {
-  const Riyoukiyaku_box = styled.View`
-    width: 94%;
-    top: 3%;
-    left: 3%;
-    height: ${height > 800 ? `70%` : height > 600 ? `480px` : `94%`};
-    border-radius: 35px;
-    background-color: white;
-  `;
-  const Riyouki_top_box = styled.View`
-    ${is_android
-      ? ""
-      : `border-top-left-radius: 35px;
+    const Riyoukiyaku_box = styled.View`
+      width: 94%;
+      top: 3%;
+      left: 3%;
+      height: ${height > 800 ? `70%` : height > 600 ? `480px` : `94%`};
+      border-radius: 35px;
+      background-color: white;
+    `;
+    const Riyouki_top_box = styled.View`
+      ${is_android
+        ? ""
+        : `border-top-left-radius: 35px;
     border-top-right-radius: 35px;`}
 
-    background-color: #ffffff;
-    height: 70px;
-    border-bottom-width: 8px;
-    border-color: #41717c;
-  `;
-  const Riyouki_top_text = styled(General_text)`
-    line-height: 70px;
-    ${flexble_font_size(36)}
-    color: #41717c;
-    text-align: center;
-  `;
-  const Riyouki_main = styled.View`
-    width: 100%;
-  `;
-  const Riyouki_main_text = styled(General_text)`
-    ${flexble_font_size(24)}
-  `;
-  const Riyouki_bottom_box = styled.View`
-    height: ${flexble_px(80)};
-  `;
-  const Riyouki_bottom_button_wide = styled(General_button)`
-    height: ${flexble_px(80)};
-    background-color: #41717c;
-    ${is_android
-      ? ""
-      : `border-bottom-left-radius: 35px;
+      background-color: #ffffff;
+      height: 70px;
+      border-bottom-width: 8px;
+      border-color: #41717c;
+    `;
+    const Riyouki_top_text = styled(General_text)`
+      line-height: 70px;
+      ${flexble_font_size(36)}
+      color: #41717c;
+      text-align: center;
+    `;
+    const Riyouki_main = styled.View`
+      width: 100%;
+    `;
+    const Riyouki_main_text = styled(General_text)`
+      ${flexble_font_size(24)}
+    `;
+    const Riyouki_bottom_box = styled.View`
+      height: ${flexble_px(80)};
+    `;
+    const Riyouki_bottom_button_wide = styled(General_button)`
+      height: ${flexble_px(80)};
+      background-color: #41717c;
+      ${is_android
+        ? ""
+        : `border-bottom-left-radius: 35px;
     border-bottom-right-radius: 35px;`}
-  `;
+    `;
 
-  const Riyouki_bottom_button_right = styled(Riyouki_bottom_button_wide)`
-    position: absolute;
-    width: 70%;
-    right: 0%;
-    ${is_android ? "" : `border-bottom-left-radius: ${v_w(0)}px;`}
-    border-left-width: ${v_w(1.0)}px;
-    border-color: #ffffff;
-  `;
+    const Riyouki_bottom_button_right = styled(Riyouki_bottom_button_wide)`
+      position: absolute;
+      width: 70%;
+      right: 0%;
+      ${is_android ? "" : `border-bottom-left-radius: ${v_w(0)}px;`}
+      border-left-width: ${v_w(1.0)}px;
+      border-color: #ffffff;
+    `;
 
-  const Riyouki_bottom_button_left = styled(Riyouki_bottom_button_wide)`
-    position: absolute;
-    width: 30%;
-    left: 0%;
-    border-bottom-right-radius: ${v_w(0)}px;
-    border-right-width: ${v_w(0)}px;
-    border-color: #ffffff;
-  `;
+    const Riyouki_bottom_button_left = styled(Riyouki_bottom_button_wide)`
+      position: absolute;
+      width: 30%;
+      left: 0%;
+      border-bottom-right-radius: ${v_w(0)}px;
+      border-right-width: ${v_w(0)}px;
+      border-color: #ffffff;
+    `;
 
-  const Riyouki_bottom_button_text = styled(General_text)`
-    ${bold_status}
-    line-height: ${flexble_px(80)};
-    ${flexble_font_size(32)}
-    color: #fffffd;
-    text-align: center;
-  `;
+    const Riyouki_bottom_button_text = styled(General_text)`
+      ${bold_status}
+      line-height: ${flexble_px(80)};
+      ${flexble_font_size(32)}
+      color: #fffffd;
+      text-align: center;
+    `;
     return (
       <Riyoukiyaku_box activeOpacity={1}>
         <Riyouki_top_box>
@@ -992,14 +1011,23 @@ function Riyoukiyaku_comp({
           {selectable ? (
             <View>
               <Riyouki_bottom_button_right onPress={agree_event}>
-                <Riyouki_bottom_button_text>{right_big_option_text}</Riyouki_bottom_button_text>
+                <Riyouki_bottom_button_text>
+                  {right_big_option_text}
+                </Riyouki_bottom_button_text>
               </Riyouki_bottom_button_right>
               <Riyouki_bottom_button_left onPress={deny_event}>
-                <Riyouki_bottom_button_text>{left_small_option_text}</Riyouki_bottom_button_text>
+                <Riyouki_bottom_button_text>
+                  {left_small_option_text}
+                </Riyouki_bottom_button_text>
               </Riyouki_bottom_button_left>
             </View>
           ) : (
-            <Riyouki_bottom_button_wide onPress={()=>{out_event();deny_event()}}>
+            <Riyouki_bottom_button_wide
+              onPress={() => {
+                out_event();
+                deny_event();
+              }}
+            >
               <Riyouki_bottom_button_text>閉じる</Riyouki_bottom_button_text>
             </Riyouki_bottom_button_wide>
           )}
@@ -1019,14 +1047,60 @@ type navi_props = { navigation: any };
 
 type navi_param_props = { route: any; navigation: any };
 
-const Body_box = styled(SafeAreaView)`
+const captureScreen = async (viewRef: any) => {
+  try {
+    const uri = await captureRef(viewRef.current, {
+      format: "png",
+      quality: 0.8,
+    });
+
+    // 画像をBase64に変換
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64data = reader.result;
+
+      // Base64データを含むJSONを送信
+      try {
+        const response = await fetch("http://192.168.1.16:8000/test/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ image: base64data }),
+        });
+
+        if (response.ok) {
+          const jsonResponse = await response.json();
+          console.log("Image uploaded successfully", jsonResponse);
+        } else {
+          alert("aaaa");
+          console.error("Failed to upload image", response.statusText);
+        }
+      } catch (error) {
+        alert("aaaa");
+        console.error("Failed to upload image", error);
+      }
+    };
+
+    reader.readAsDataURL(blob);
+  } catch (error) {
+    console.error("Failed to capture screenshot", error);
+  }
+};
+
+const Body_box = styled.View`
   background-color: #f1f3f5;
+  width: ${width}px;
+  hieght: ${height}px;
+  top: 0px;
 `;
 
 const Body = styled.ScrollView`
   background-color: #f1f3f5;
-  width: 100%;
-  height: 100%;
+  width: ${width}px;
+  hieght: ${height}px;
 `;
 
 const Body_no_scroll = styled.View`
@@ -1047,15 +1121,25 @@ type main_base_props = {
   no_scroll?: boolean;
   background_transparent?: boolean;
 };
+const Satueibotan = styled.TouchableOpacity`
+    position: absolute;
+    bottom: -200px;
+    width: 100px;
+    height: 100px;
+    background-color: #000000;
+  `;
+var ASDREF:any=null
 const Main_base = ({
   navigation,
   children,
   no_scroll = false,
 }: main_base_props) => {
+  const AAAref = useRef();
+  ASDREF=AAAref
   const Footer = ({ navigation }: navi_props) => {
     let user_id = get_user_id();
-    const insets = useSafeAreaInsets();
-    const { width, height } = useWindowDimensions();
+    //const insets = useSafeAreaInsets();
+    //const { width, height } = useWindowDimensions();
     const [unread_notification_comp, setunread_notification_comp] = useState(
       <View />
     );
@@ -1086,9 +1170,9 @@ const Main_base = ({
       bottom: 0px;
       margin-right: auto;
       margin-left: auto;
-      background-color: #C5CDD0;
-      border-color:#ffffff;
-      border-top-width:0px;
+      background-color: #c5cdd0;
+      border-color: #ffffff;
+      border-top-width: 0px;
     `;
 
     const Footer_option_box_box = styled.View`
@@ -1278,6 +1362,7 @@ const Main_base = ({
       border-color: #ffffff;
       border-left-width: 1px;
       border-right-width: 1px;
+      background-color: #5a9fa6;
       border-bottom-width: 1px;
     `;
 
@@ -1298,6 +1383,7 @@ const Main_base = ({
       border-color: #ffffff;
       border-left-width: 1px;
       border-right-width: 1px;
+      background-color: #5a9fa6;
       border-color: #ffffff;
       border-bottom-width: 1px;
       border-top-width: 0px;
@@ -1401,15 +1487,15 @@ const Main_base = ({
     );
   };
 
-  const insets = useSafeAreaInsets();
+  //const insets = useSafeAreaInsets();
   const Footer_hagekakusi = styled.View`
     position: absolute;
     width: 100%;
     bottom: 0px;
     height: ${insets.bottom}px;
-    background-color: #C5CDD0;
+    background-color: #c5cdd0;
   `;
-  const { width, height } = useWindowDimensions();
+  //const { width, height } = useWindowDimensions();
   let [fontsLoaded] = is_android
     ? [0]
     : useFonts({
@@ -1433,6 +1519,7 @@ const Main_base = ({
   const [variable_part, setvariable_part] = useState(
     <Footer navigation={navigation} />
   );
+  
 
   if (no_scroll) {
     return (
@@ -1448,9 +1535,11 @@ const Main_base = ({
     );
   } else {
     return (
-      <Body_box>
+      <Body_box ref={AAAref} style={{ height: height, width: width }}>
         <StatusBar style="dark" />
-        <Body>
+        <Body
+          style={{ height: height - insets.top - insets.bottom, width: width }}
+        >
           {children}
           <Footer_space
             style={Object.assign(
@@ -1467,6 +1556,9 @@ const Main_base = ({
         </Body>
         <Footer_hagekakusi />
         {variable_part}
+        <Satueibotan onPress={()=>{
+          captureScreen(ASDREF)
+        }} />
       </Body_box>
     );
   }
@@ -1476,14 +1568,16 @@ type main_base_no_footer_props = {
   children: any;
   no_scroll?: boolean;
   background_color?: string;
-  scroll_event?:Function;
+  scroll_event?: Function;
 };
 const Main_base_no_footer = ({
-  navigation=null,
+  navigation = null,
   children,
   background_color = "#f1f3f5",
-  scroll_event=(event:any)=>{}
+  scroll_event = (event: any) => {},
 }: main_base_no_footer_props) => {
+  const AAAref = useRef();
+  ASDREF=AAAref
   let [fontsLoaded] = is_android
     ? [0]
     : useFonts({
@@ -1491,13 +1585,29 @@ const Main_base_no_footer = ({
         NotoSans_700Bold,
       });
   return (
-    <SafeAreaView>
-      <StatusBar style="dark" />
-      <Body onScroll={(event: any) => {
-            scroll_event(event)
-          }}
-          scrollEventThrottle={5} style={{backgroundColor:background_color}}>{children}</Body>
-    </SafeAreaView>
+    <Body_box ref={AAAref} style={{ height: height, width: width }}>
+    <StatusBar style="dark" />
+    <Body
+      style={{ height: height - insets.top - insets.bottom, width: width }}
+    >
+      {children}
+      <Footer_space
+        style={Object.assign(
+          height > width
+            ? { height: width * (is_iPad ? 0.15 : 0.4) + insets.bottom }
+            : {
+                height: height * (!is_iPad ? 0.15 : 0.4) + insets.bottom,
+              },
+          {
+            width: "100%",
+          }
+        )}
+      ></Footer_space>
+    </Body>
+    <Satueibotan onPress={()=>{
+      captureScreen(ASDREF)
+    }} />
+  </Body_box>
   );
 };
 
@@ -1542,4 +1652,9 @@ export {
   the_fetch,
   formdata_fetch,
   re_first_boot,
+  insets,
+  width,
+  height,
+  StatusBar,
+  captureScreen,
 };

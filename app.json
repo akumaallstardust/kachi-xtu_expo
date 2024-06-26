@@ -1,8 +1,9 @@
 {
   "expo": {
+    "jsEngine": "hermes",
     "name": "カチッ",
     "slug": "kachi-xtu",
-    "version": "1.0.2",
+    "version": "1.0.12",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,18 +17,21 @@
     ],
     "ios": {
       "infoPlist": {
-        "UISupportedInterfaceOrientations": [
-          "UIInterfaceOrientationPortrait"
+        "ITSAppUsesEncryption": true,
+        "ITSAppUsesNonExemptEncryption": false,
+        "UIDeviceFamily": [
+          1
         ],
-        "UISupportedInterfaceOrientations~ipad": [
-          "UIInterfaceOrientationPortrait",
-          "UIInterfaceOrientationPortraitUpsideDown"
-        ]
+        "aps-environment": "production",
+        "NSPhotoLibraryUsageDescription":"このアプリは次の目的で写真ライブラリにアクセスします:\n -アイコンの変更の際の新しいアイコンの取得のため\n -下書きに画像を追加するため"
       },
       "bundleIdentifier": "com.oosakanoakuma.kachi-xtu",
-      "buildNumber": "102",
+      "buildNumber": "112",
       "icon": "./assets/icon.png",
-      "supportsTablet": false
+      "supportsTablet": false,
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -56,12 +60,16 @@
             "usesCleartextTraffic": true
           }
         }
-      ]
+      ],
+      "expo-asset"
     ],
     "extra": {
       "eas": {
         "projectId": "a8ee13c2-aff0-49c2-b318-9a7c514c46ab"
       }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/a8ee13c2-aff0-49c2-b318-9a7c514c46ab"
     }
   }
 }

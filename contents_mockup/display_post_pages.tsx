@@ -880,11 +880,7 @@ function Child_comment({ comment_data, navigation }: child_comment_props) {
             }}
           />
         </Commnet_styles.Comment_user_icon>
-        <Commnet_styles.Comment_username onPress={() => {
-              navigation.navigate("User_page", {
-                user_id: comment_data.comment_user_id,
-              });
-            }}>
+        <Commnet_styles.Comment_username>
           <Commnet_styles.Comment_username_text numberOfLines={3}>
             {comment_data.comment_username}
           </Commnet_styles.Comment_username_text>
@@ -1378,7 +1374,7 @@ function Discussion_box_comp({
                       } else {
                         showalert(
                           "通信エラー",
-                          `エラーコード:悔やむと書いてミライの反対の曲　勝利の日まで\n\n通信環境が正常なことを確認しても、同じエラーが出る場合はエラーコードと共に運営に連絡してください。\n詳細エラーコード${response}`
+                          "エラーコード:悔やむと書いてミライの反対の曲　勝利の日まで\n\n通信環境が正常なことを確認しても、同じエラーが出る場合はエラーコードと共に運営に連絡してください。"
                         );
                       }
                     } else {
@@ -1594,7 +1590,7 @@ function open_discussion_box(
       console.log(error);
       showalert(
         "通信エラー",
-        `エラーコード:国会、司法、軍隊。大日本帝国の三権分立\n\n通信環境が正常なことを確認しても、同じエラーが出る場合はエラーコードと共に運営に連絡してください。\n詳細エラーコード${error}`
+        "エラーコード:国会、司法、軍隊。大日本帝国の三権分立\n\n通信環境が正常なことを確認しても、同じエラーが出る場合はエラーコードと共に運営に連絡してください。"
       );
     });
 }
@@ -1934,14 +1930,14 @@ const Post_box: React.FC<post_props> = ({
                   } else if (data["result"] == "failed_error") {
                     showalert(
                       "エラー",
-                      "エラーコード:竜飛海底駅で人身事故あったら多分わたしです\n\nページを読み込み直してもこのメッセージが出る場合はエラーコードと共に運営に問い合わせてください"
+                      "エラーコード: 牛タンはおいしい\n\nページを読み込み直してもこのメッセージが出る場合はエラーコードと共に運営に問い合わせてください"
                     );
                   }
                 })
                 .catch((error) => {
                   showalert(
                     "通信エラー",
-                    `エラーコード:牛タンはおいしい\n\n通信状態を確認してください\n通信状態が問題ない状態でもこのエラーがでるなら、\n詳細エラーコード${error}`
+                    "エラーコード:竜飛海底駅で人身事故あったら多分わたしです\n\n通信状態を確認してください\n通信状態が問題ない状態でもこのエラーがでるなら、運営にエラーコードと共に連絡してください"
                   );
                   console.log(error);
                 });
@@ -2005,7 +2001,7 @@ const Post_box: React.FC<post_props> = ({
                 .catch((error) => {
                   showalert(
                     "通信エラー",
-                    `エラーコード:地球を0.13秒で一周できる光も静岡大陸横断には1時間かかる\n\n通信状態を確認してください\n通信状態が問題ない状態でもこのエラーがでるなら、運営にエラーコードと共に連絡してください\n詳細エラーコード${error}`
+                    "エラーコード:地球を0.13秒で一周できる光も静岡大陸横断には1時間かかる\n\n通信状態を確認してください\n通信状態が問題ない状態でもこのエラーがでるなら、運営にエラーコードと共に連絡してください"
                   );
                   console.log(error);
                 });
@@ -2383,15 +2379,10 @@ function search_post(
     })
     .catch((error: Error) => {
       console.log(error);
-      if(error.message == 'Network request failed'){
-        showalert("ネットワーク未接続","ネットワークが接続されていません。\nなお、オフラインでも下書きの作成は可能です")
-      }
-      else{
-        showalert(
-          "通信エラー",
-          `エラーコード:うちの庭にウラン鉱山できないかなぁ。\n\n読み込み直しても同じエラーが出る場合エラーコードと共に運営に問い合わせてください\n詳細エラーコード${error}`
-        );
-      }
+      showalert(
+        "通信エラー",
+        "エラーコード:うちの庭にウラン鉱山できないかなぁ。\n\n読み込み直しても同じエラーが出る場合エラーコードと共に運営に問い合わせてください"
+      );
     });
 }
 
@@ -2685,7 +2676,7 @@ function View_history_page({ navigation }: navi_props) {
           console.log(error);
           showalert(
             "通信エラー",
-            `エラーコード:Javaに後方互換という概念はない\n\n通信環境が正常なことを確認しても、同じエラーが出る場合はエラーコードと共に運営に連絡してください。\n詳細エラーコード${error}`
+            "エラーコード:Javaに後方互換という概念はない\n\n通信環境が正常なことを確認しても、同じエラーが出る場合はエラーコードと共に運営に連絡してください。"
           );
         });
     } else {
@@ -2823,7 +2814,7 @@ function Uni_post_page({ route, navigation }: navi_param_props) {
         console.log(error);
         showalert(
           "通信エラー",
-          `エラーコード:日本の中心は東京だけど東京の中心は新宿\n\n読み込み直しても同じエラーが出る場合エラーコードと共に運営に問い合わせてください\n詳細エラーコード${error}`
+          "エラーコード:日本の中心は東京だけど東京の中心は新宿\n\n読み込み直しても同じエラーが出る場合エラーコードと共に運営に問い合わせてください"
         );
       });
   }
@@ -2955,7 +2946,7 @@ function My_post_page({ navigation }: navi_props) {
       .catch((error) => {
         showalert(
           "通信エラー",
-          `エラーコード:ママチャリでレインボーロード走る\n\n読み込み直しても同じエラーが出る場合エラーコードと共に運営に問い合わせてください\n詳細エラーコード${error}`
+          "エラーコード:ママチャリでレインボーロード走る\n\n読み込み直しても同じエラーが出る場合エラーコードと共に運営に問い合わせてください"
         );
       });
   }

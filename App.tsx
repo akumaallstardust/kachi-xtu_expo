@@ -26,9 +26,6 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  useEffect(() => {
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-  }, []);
   return (
     <NavigationContainer>
     <Stack.Navigator screenOptions={{headerShown: false,orientation: 'portrait'}} >

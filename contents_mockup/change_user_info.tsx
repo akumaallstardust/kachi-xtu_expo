@@ -21,13 +21,15 @@ import {
   is_android,
   formdata_fetch,
   the_fetch,
+  width,
+  height,
+  insets,
 } from "./parts";
 import { useFocusEffect, CommonActions } from "@react-navigation/native";
 import { password_patteen } from "./login_signup";
 import { StatusBar } from "expo-status-bar";
 import {
   Platform,
-  useWindowDimensions,
   Dimensions,
   Text,
   View,
@@ -66,33 +68,7 @@ var Change_user_info_box = styled.View`
   text-align: left;
 `;
 
-interface File extends Blob {
-  name: string;
-  lastModified: number;
-}
-
-declare var File: {
-  prototype: File;
-  new (
-    fileParts?: Array<Blob | string>,
-    name?: string,
-    options?: BlobOptions
-  ): File;
-};
-
-interface Blob {
-  readonly size: number;
-  readonly type: string;
-  slice(start?: number, end?: number, contentType?: string): Blob;
-}
-
-declare var Blob: {
-  prototype: Blob;
-  new (blobParts?: Array<Blob | string>, options?: BlobOptions): Blob;
-};
-
 function Change_user_info_page({ navigation }: navi_props) {
-  const { width, height } = useWindowDimensions();
   const user_id = get_user_id();
   if (width >= 500) {
     var Change_icon_input_box_box = styled.View`
@@ -277,7 +253,7 @@ function Change_user_info_page({ navigation }: navi_props) {
     `;
 
     var Change_icon_input_button_text = styled.Text`
-      line-height: 60px;
+    line-height: 60px;
       font-size: 28px;
       text-align: center;
       color: #5a9fa6;
@@ -400,7 +376,7 @@ function Change_user_info_page({ navigation }: navi_props) {
             console.log(error);
             showalert(
               "通信エラー",
-              `エラーコード:泥棒対策のために米軍基地の隣に住んでる\n\n通信状況が問題ないことを確認した後も同じエラーが出るときは運営にエラーコードと共に伝えてください。\n詳細エラーコード${error}`
+              "エラーコード:万引き対策のために米軍基地の隣に住んでる\n\n通信状況が問題ないことを確認した後も同じエラーが出るときは運営にエラーコードと共に伝えてください。"
             );
           });
       } else {
@@ -474,7 +450,7 @@ function Change_user_info_page({ navigation }: navi_props) {
           name: "allstardust_project",
           uri: icon_uri,
         });
-
+        
         formdata_fetch(
           site_url + "change_user_info_process/app/",
           formData,
@@ -490,10 +466,7 @@ function Change_user_info_page({ navigation }: navi_props) {
                   site_url + `media/user_icons/user_icon_mini_${user_id}.png`
                 ).then((data: any) => {
                   setupload_processing_flag(false);
-                  showalert(
-                    "",
-                    "変更に成功しました\n\nアイコンの変更はすぐに反映されない場合があるので、その場合はアプリを再起動してください"
-                  ).then(() => {
+                  showalert("", "変更に成功しました\n\nすぐに反映されない場合があるので、その場合はアプリを再起動してください").then(() => {
                     const resetAction = CommonActions.reset({
                       index: 0, // 初期スタックのインデックス
                       routes: [{ name: "My_page", params: {} }],
@@ -502,10 +475,7 @@ function Change_user_info_page({ navigation }: navi_props) {
                   });
                 });
               } else {
-                showalert(
-                  "",
-                  "変更に成功しました"
-                ).then(() => {
+                showalert("", "変更に成功しました\n\nすぐに反映されない場合があるので、その場合はアプリを再起動してください").then(() => {
                   const resetAction = CommonActions.reset({
                     index: 0, // 初期スタックのインデックス
                     routes: [{ name: "My_page", params: {} }],
@@ -533,7 +503,7 @@ function Change_user_info_page({ navigation }: navi_props) {
             setupload_processing_flag(false);
             showalert(
               "通信エラー",
-              `エラーコード:オーシャンビューのホテルから見える海が貨物港\n\n通信状態を確認してください\n\n通信状態を確認した後もこのメッセージが表示される場合はエラーコードと共に運営に伝えてください。\n詳細エラーコード${error}`
+              "エラーコード:オーシャンビューのホテルから見える海が貨物港\n\n通信状態を確認してください\n\n通信状態を確認した後もこのメッセージが表示される場合はエラーコードと共に運営に伝えてください。"
             );
             console.log(error);
           });
@@ -709,14 +679,15 @@ function Change_password_page({ navigation }: navi_props) {
 
   const [upload_processing_flag, setupload_processing_flag] = useState(false);
   function check_and_post() {
-    if (password_new.length < 6) {
+    if(password_new.length<6){
       alert_buttom({
         setout_of_main: setout_of_main,
         text: "パスワードは6文字以上です",
         is_warning: true,
         is_top: true,
       });
-    } else if (!password_patteen.test(password_new)) {
+    }
+    else if (!password_patteen.test(password_new)) {
       alert_buttom({
         setout_of_main: setout_of_main,
         text: "新しいパスワードが不正です",
@@ -793,7 +764,7 @@ function Change_password_page({ navigation }: navi_props) {
           setupload_processing_flag(false);
           showalert(
             "通信エラー",
-            `エラーコード:死亡フラグ 雨少ししか降ってないから傘いらないな!\n\n通信状態を確認してください\n\n通信状態を確認した後もこのメッセージが表示される場合はエラーコードと共に運営に伝えてください。\n詳細エラーコード${error}`
+            "エラーコード:死亡フラグ 雨少ししか降ってないから傘いらないな!\n\n通信状態を確認してください\n\n通信状態を確認した後もこのメッセージが表示される場合はエラーコードと共に運営に伝えてください。"
           );
           console.log(error);
         });

@@ -480,7 +480,7 @@ height: 100%;
     margin-left: auto;
   `;
   export const Post_button_text = styled(General_text)`
-    ${true ? bold_status : ""}
+  ${true?bold_status:""}
     text-align: center;
     ${flexble_font_size(32)}
     height: 60px;
@@ -492,14 +492,15 @@ height: 100%;
 
 let id = 0;
 let saved_flag = true;
-var content_split = [``];
+var content_split = [`永遠の夕焼けが照らす世界観は、その名の通り一日中夕焼けが続く非現実的で神秘的なアートワークを実現するための世界観です。
+この世界観は`]//[``];
 var image_count = 0;
 var pre_focus_textarea_index = 0;
 var pre_textarea_cursor_position = 0;
 let image_uri_list: string[] = [];
 var image_base64_list: string[] = [];
 var image_upload_processing_flag = false;
-var textareas_box_height = 100000; //大きな値にする
+
 var tag_count = 1;
 var tag_content_list = [""];
 
@@ -535,12 +536,8 @@ function One_tag_input({ tag_index }: one_tag_input_props) {
 
 type one_content_textarea_props = {
   textarea_index: number;
-  input_function: Function;
 };
-function One_content_textarea({
-  textarea_index,
-  input_function,
-}: one_content_textarea_props) {
+function One_content_textarea({ textarea_index }: one_content_textarea_props) {
   const [parted_content, setparted_content] = useState(
     content_split[textarea_index]
   );
@@ -614,17 +611,13 @@ function One_content_textarea({
             );
             saved_flag = false;
           }
-          input_function(null, true);
         }}
       />
     </Post_page_styles.Content_textarea_box>
   );
 }
 
-async function set_textareas_box_process(
-  setcontent_textareas: Function,
-  input_function: Function
-) {
+async function set_textareas_box_process(setcontent_textareas: Function) {
   let textarea_and_image_minus1_dict_list = [];
   for (let i = 0; i < image_count; i++) {
     textarea_and_image_minus1_dict_list[
@@ -634,17 +627,14 @@ async function set_textareas_box_process(
     };
   }
   await setcontent_textareas(<View />); //これがなきゃ前のデータが残る なぜかawaitがいる
-  await setcontent_textareas(
+  setcontent_textareas(
     <View>
       {image_count != 0 ? (
         <View>
           {textarea_and_image_minus1_dict_list.map(
             (textarea_data: { index: number }) => (
               <View key={textarea_data.index}>
-                <One_content_textarea
-                  input_function={input_function}
-                  textarea_index={textarea_data.index}
-                />
+                <One_content_textarea textarea_index={textarea_data.index} />
                 <Post_page_styles.Content_image_box_box>
                   <Post_page_styles.Content_image_box>
                     <Image_with_aspect_ratio
@@ -671,19 +661,14 @@ async function set_textareas_box_process(
       ) : (
         <View />
       )}
-      <One_content_textarea
-        input_function={input_function}
-        textarea_index={image_count}
-      />
+      <One_content_textarea textarea_index={image_count} />
     </View>
   );
-  input_function(null,true)
 }
 
 async function delete_image(
   image_index: number,
-  setcontent_textareas: Function,
-  set_input_button_y: Function = () => {}
+  setcontent_textareas: Function
 ) {
   if (pre_focus_textarea_index == image_index + 1) {
     pre_focus_textarea_index--;
@@ -694,10 +679,7 @@ async function delete_image(
   content_split[image_index] += content_split[image_index + 1];
   content_split.splice(image_index + 1, 1);
   image_count--;
-  set_textareas_box_process(
-    (setcontent_textareas = setcontent_textareas),
-    set_input_button_y
-  );
+  set_textareas_box_process((setcontent_textareas = setcontent_textareas));
 }
 
 async function insert_image_in_textarea() {
@@ -795,26 +777,22 @@ function Post_page({ navigation }: navi_props) {
             <Post_page_styles.Add_tag_button_svg />
           </Post_page_styles.Add_tag_button>
         );
-        setcontent_textareas(
-          <One_content_textarea
-            input_function={handleScroll}
-            textarea_index={0}
-          />
-        );
+        setcontent_textareas(<One_content_textarea textarea_index={0} />);
       };
     }, [])
   );
   useEffect(() => {
     死ね();
   }, []);
-  const [title, settitle] = useState("");
+  const [title, settitle] = useState("永遠の夕焼けが照らす世界");
   const [content_textareas, setcontent_textareas] = useState(
-    <One_content_textarea input_function={handleScroll} textarea_index={0} />
+    <One_content_textarea textarea_index={0} />
   );
-  const [overview, setoverview] = useState("");
+  const [overview, setoverview] = useState("異世界や夢の中といった現実離れした設定向けの世界観の提案、および注意点の紹介");
   const [scrollY, setScrollY]: any = useState(new Animated.Value(0));
   const textareas_box_ref: any = useRef(null);
   const image_input_box_ref: any = useRef(null);
+  const [textareas_box_height, settextareas_box_height] = useState(100000); //大きな値にする
 
   const [tag_inputs, settag_inputs] = useState(
     <View style={{ width: "100%" }}>
@@ -1033,7 +1011,7 @@ function Post_page({ navigation }: navi_props) {
         } catch (e: any) {
           console.log(e);
         }
-        set_textareas_box_process(setcontent_textareas, handleScroll);
+        set_textareas_box_process(setcontent_textareas);
       } else {
         showalert(
           "読み込みエラー",
@@ -1101,7 +1079,7 @@ function Post_page({ navigation }: navi_props) {
         .then((data: any) => {
           if (data["result"] == "success") {
             //大前提としてnew_image_count>=1
-            set_textareas_box_process(setcontent_textareas, handleScroll);
+            set_textareas_box_process(setcontent_textareas);
             image_upload_processing_flag = false;
           }
         })
@@ -1129,50 +1107,48 @@ function Post_page({ navigation }: navi_props) {
     }
   }
 
-  async function handleScroll(event: any = null, only_under: boolean = false) {
-    if (event) {
-      Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
-        useNativeDriver: false,
-      })(event);
+  async function handleScroll(event: any) {
+    Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+      useNativeDriver: false,
+    })(event);
+    if (scrollY._value <= 0) {
+      setanimatedStyle({
+        transform: [{ translateY: 0 }],
+      });
+    } else if (
+      textareas_box_height -
+        Number(
+          flexble_px(240).substring(0, flexble_px(240).length - "px;".length)
+        ) <
+      scrollY._value
+    ) {
+      setanimatedStyle({
+        transform: [
+          {
+            translateY:
+              textareas_box_height -
+              Number(
+                flexble_px(240).substring(
+                  0,
+                  flexble_px(240).length - "px;".length
+                )
+              ),
+          },
+        ],
+      });
+    } else {
+      setanimatedStyle({
+        transform: [{ translateY: scrollY }],
+      });
     }
+
     if (textareas_box_ref.current) {
       textareas_box_ref.current.measure(
         (fx: any, fy: any, width: any, height: any, px: any, py: any) => {
-          textareas_box_height = height;
-          if (scrollY._value <= 0) {
-            setanimatedStyle({
-              transform: [{ translateY: 0 }],
-            });
-          } else if (
-            textareas_box_height -
-              Number(
-                flexble_px(240).slice(0, -1*"px;".length)
-              ) <
-            scrollY._value
-          ) {
-            setanimatedStyle({
-              transform: [
-                {
-                  translateY:
-                    textareas_box_height -
-                    Number(
-                      flexble_px(240).slice(0, -1*"px;".length)
-                    ),
-                },
-              ],
-            });
-          } else {
-            if(only_under==false){
-              setanimatedStyle({
-                transform: [{ translateY: scrollY }],
-              });
-            }
-          }
+          settextareas_box_height(height);
         }
       );
     }
-    
-    
   }
 
   async function set_tags() {
@@ -1279,7 +1255,7 @@ function Post_page({ navigation }: navi_props) {
             setpost_processing_flag(false);
             showalert(
               "通信エラー",
-              `エラーコード:ハイジャック俳人\n\n通信状態を確認してください\n\n通信状態を確認した後もこのメッセージが表示される場合はエラーコードと共に運営に伝えてください。\n詳細エラーコード${error}`
+              "エラーコード:ハイジャック俳人\n\n通信状態を確認してください\n\n通信状態を確認した後もこのメッセージが表示される場合はエラーコードと共に運営に伝えてください。"
             );
             console.log(error);
           });
